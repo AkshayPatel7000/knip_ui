@@ -1,0 +1,204 @@
+{
+  "name": "knip-ui-extension",
+  "displayName": "Knip UI",
+  "publisher": "akshay",
+  "description": "Beautiful UI for Knip - Find unused files, exports, and dependencies",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Linters"
+  ],
+  "keywords": [
+    "knip",
+    "unused",
+    "dead code",
+    "dependencies",
+    "cleanup"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "knipUI",
+          "title": "Knip UI",
+          "icon": "media/knip-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "knipUI": [
+        {
+          "id": "knipView",
+          "name": "Unused Code Scanner"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "knipUI.install",
+        "title": "Install Knip",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "knipUI.scan",
+        "title": "Start Scan",
+        "icon": "$(search)"
+      },
+      {
+        "command": "knipUI.rescan",
+        "title": "Rescan",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "knipUI.openFile",
+        "title": "Open File",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "knipUI.deleteFile",
+        "title": "Delete File",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "knipUI.ignoreFile",
+        "title": "Ignore File",
+        "icon": "$(eye-closed)"
+      },
+      {
+        "command": "knipUI.uninstallDep",
+        "title": "Uninstall Dependency",
+        "icon": "$(remove)"
+      },
+      {
+        "command": "knipUI.openExport",
+        "title": "Open File",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "knipUI.deleteExport",
+        "title": "Delete Export",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "knipUI.openType",
+        "title": "Open Type",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "knipUI.uninstallDep",
+        "title": "Uninstall Dependency",
+        "icon": "$(remove)"
+      },
+      {
+        "command": "knipUI.installMissing",
+        "title": "Install Dependency",
+        "icon": "$(add)"
+      },
+      {
+        "command": "knipUI.cancelScan",
+        "title": "Cancel Scan",
+        "icon": "$(stop)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "knipUI.rescan",
+          "when": "view == knipView && knipUI:hasResults",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "knipUI.openFile",
+          "when": "view == knipView && viewItem == unusedFile",
+          "group": "navigation@1"
+        },
+        {
+          "command": "knipUI.deleteFile",
+          "when": "view == knipView && viewItem == unusedFile",
+          "group": "actions@1"
+        },
+        {
+          "command": "knipUI.ignoreFile",
+          "when": "view == knipView && viewItem == unusedFile",
+          "group": "actions@2"
+        },
+        {
+          "command": "knipUI.openExport",
+          "when": "view == knipView && viewItem == unusedExport",
+          "group": "navigation@1"
+        },
+        {
+          "command": "knipUI.deleteExport",
+          "when": "view == knipView && viewItem == unusedExport",
+          "group": "actions@1"
+        },
+        {
+          "command": "knipUI.installMissing",
+          "when": "view == knipView && viewItem == missingDep",
+          "group": "actions@1"
+        },
+        {
+          "command": "knipUI.uninstallDep",
+          "when": "view == knipView && (viewItem == unusedDep || viewItem == unusedDevDep)",
+          "group": "actions@1"
+        },
+        {
+          "command": "knipUI.openType",
+          "when": "view == knipView && viewItem == unusedType",
+          "group": "navigation@1"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Knip UI",
+      "properties": {
+        "knipUI.packageManager": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "npm",
+            "yarn",
+            "pnpm"
+          ],
+          "default": "auto",
+          "description": "Package manager to use for dependency operations"
+        },
+        "knipUI.confirmDeletes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ask for confirmation before deleting files"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "watch": "tsc -watch -p .",
+    "lint": "eslint . --ext .ts",
+    "package": "@vscode/vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vscode/vsce": "^2.24.0",
+    "eslint": "^8.56.0",
+    "typescript": "^5.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/knip-ui-extension"
+  },
+  "license": "MIT",
+  "icon": "media/knip-icon.png"
+}
