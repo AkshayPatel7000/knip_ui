@@ -1,7 +1,7 @@
 {
   "name": "knip-ui-extension",
   "displayName": "Knip UI",
-  "publisher": "akshay",
+  "publisher": "akshay7000",
   "description": "Beautiful UI for Knip - Find unused files, exports, and dependencies",
   "version": "0.1.0",
   "engines": {
