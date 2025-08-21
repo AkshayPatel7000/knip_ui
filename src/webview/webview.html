@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Knip UI</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+        color: white;
+        height: 100vh;
+        overflow-x: hidden;
+      }
+
+      .container {
+        padding: 20px;
+        height: 100%;
+        overflow-y: auto;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .header h1 {
+        font-size: 24px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .icon-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-radius: 8px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: white;
+      }
+
+      .icon-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+      }
+
+      .search-box {
+        position: relative;
+        margin-bottom: 20px;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 12px 16px 12px 44px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        color: white;
+        font-size: 16px;
+        outline: none;
+        transition: all 0.2s;
+      }
+
+      .search-input::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .search-input:focus {
+        border-color: #4fc3f7;
+        box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.2);
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .welcome-screen {
+        text-align: center;
+        padding: 60px 20px;
+      }
+
+      .welcome-screen h2 {
+        font-size: 28px;
+        margin-bottom: 16px;
+        background: linear-gradient(135deg, #81c784 0%, #4fc3f7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .welcome-screen p {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 30px;
+        line-height: 1.5;
+      }
+
+      .btn {
+        background: linear-gradient(135deg, #4fc3f7 0%, #29b6f6 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 12px 24px;
+        color: white;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3);
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(79, 195, 247, 0.4);
+      }
+
+      .btn.secondary {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: none;
+      }
+
+      .btn.secondary:hover {
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .section {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+      }
+
+      .section-header {
+        padding: 16px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .section-header:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .badge {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .chevron {
+        transition: transform 0.2s;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .section.expanded .chevron {
+        transform: rotate(90deg);
+      }
+
+      .section-content {
+        display: none;
+        padding: 0;
+      }
+
+      .section.expanded .section-content {
+        display: block;
+      }
+
+      .item {
+        padding: 12px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.2s;
+      }
+
+      .item:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .item:last-child {
+        border-bottom: none;
+      }
+
+      .item-name {
+        font-family: "Courier New", monospace;
+        font-size: 14px;
+      }
+
+      .item-actions {
+        display: flex;
+        gap: 8px;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+
+      .item:hover .item-actions {
+        opacity: 1;
+      }
+
+      .item-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-radius: 6px;
+        padding: 4px 8px;
+        color: white;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .item-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .item-btn.danger {
+        background: rgba(244, 67, 54, 0.2);
+      }
+
+      .item-btn.danger:hover {
+        background: rgba(244, 67, 54, 0.4);
+      }
+
+      .item-btn.success {
+        background: rgba(76, 175, 80, 0.2);
+      }
+
+      .item-btn.success:hover {
+        background: rgba(76, 175, 80, 0.4);
+      }
+
+      .loading {
+        text-align: center;
+        padding: 40px;
+      }
+
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(255, 255, 255, 0.1);
+        border-top: 4px solid #4fc3f7;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 16px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .install-prompt {
+        background: rgba(255, 193, 7, 0.1);
+        border: 1px solid rgba(255, 193, 7, 0.3);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .install-prompt h3 {
+        color: #ffc107;
+        margin-bottom: 10px;
+      }
+
+      .install-options {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 15px;
+      }
+
+      .hidden {
+        display: none;
+      }
+      .chevron {
+        transition: transform 0.2s;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .section.expanded .chevron {
+        transform: rotate(90deg);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Knip UI</h1>
+        <div class="header-actions">
+          <button class="icon-btn" onclick="rescan()" title="Rescan">
+            <span>↻</span>
+          </button>
+          <button
+            class="icon-btn"
+            onclick="toggleCollapseAll()"
+            title="Collapse All"
+          >
+            ⬍
+          </button>
+        </div>
+      </div>
+
+      <div id="search-box" class="search-box">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Filter"
+          onkeyup="filterItems(this.value)"
+        />
+        <span class="search-icon">🔍</span>
+      </div>
+
+      <div id="welcome-screen" class="welcome-screen">
+        <h2>Welcome to Knip Scanner! 🎉</h2>
+        <p>
+          Analyze your project for unused files, dependencies, and exports.<br />Get
+          started by scanning your workspace.
+        </p>
+        <button class="btn" onclick="getStarted()">
+          <span>▶</span>
+          Get Started
+        </button>
+      </div>
+
+      <div id="install-prompt" class="install-prompt hidden">
+        <h3>⚠ Knip Not Installed</h3>
+        <p>
+          Knip is required to analyze your project. Please install it globally.
+        </p>
+        <div class="install-options">
+          <button class="btn secondary" onclick="installKnip('npm')">
+            Install with NPM
+          </button>
+          <button class="btn secondary" onclick="installKnip('yarn')">
+            Install with Yarn
+          </button>
+        </div>
+      </div>
+
+      <div id="loading-screen" class="loading hidden">
+        <div class="spinner"></div>
+        <p>Scanning your project...</p>
+      </div>
+
+      <div id="results-container" class="hidden">
+        <!-- Content will be populated by JavaScript -->
+      </div>
+    </div>
+
+    <script>
+      const vscode = acquireVsCodeApi();
+      let currentData = null;
+
+      window.addEventListener("message", (event) => {
+        const message = event.data;
+
+        switch (message.type) {
+          case "updateData":
+            updateData(message.data);
+            break;
+          case "knipInstallStatus":
+            handleInstallStatus(message.installed);
+            break;
+          case "showInstallPrompt":
+            showInstallPrompt();
+            break;
+          case "scanStarted":
+            showLoading();
+            break;
+          case "scanCompleted":
+            showResults(message.data);
+            break;
+          case "scanError":
+            showError(message.error);
+            break;
+          case "collapseAll":
+            collapseAllSections();
+            break;
+        }
+      });
+
+      function getStarted() {
+        vscode.postMessage({ type: "getStarted" });
+      }
+
+      function installKnip(packageManager) {
+        vscode.postMessage({ type: "installKnip", packageManager });
+        hideInstallPrompt();
+        showScanButton();
+      }
+
+      function startScan() {
+        vscode.postMessage({ type: "startScan" });
+      }
+
+      function rescan() {
+        vscode.postMessage({ type: "rescan" });
+      }
+
+      function collapseAll() {
+        vscode.postMessage({ type: "collapseAll" });
+      }
+
+      function collapseAllSections() {
+        document.querySelectorAll(".section").forEach((section) => {
+          section.classList.remove("expanded");
+        });
+      }
+      // Add this new function for expand all
+      function expandAllSections() {
+        document.querySelectorAll(".section").forEach((section) => {
+          section.classList.add("expanded");
+        });
+      }
+
+      // Update the collapse button to toggle between collapse/expand
+      let allCollapsed = false;
+
+      function toggleCollapseAll() {
+        if (allCollapsed) {
+          expandAllSections();
+          document.querySelector(
+            '.icon-btn[onclick="toggleCollapseAll()"]'
+          ).innerHTML = "⬍";
+          document.querySelector(
+            '.icon-btn[onclick="toggleCollapseAll()"]'
+          ).title = "Collapse All";
+          allCollapsed = false;
+        } else {
+          collapseAllSections();
+          document.querySelector(
+            '.icon-btn[onclick="toggleCollapseAll()"]'
+          ).innerHTML = "⬌";
+          document.querySelector(
+            '.icon-btn[onclick="toggleCollapseAll()"]'
+          ).title = "Expand All";
+          allCollapsed = true;
+        }
+      }
+      function handleInstallStatus(installed) {
+        if (installed) {
+          hideInstallPrompt();
+          showScanButton();
+        } else {
+          showInstallPrompt();
+        }
+      }
+
+      function showInstallPrompt() {
+        document.getElementById("install-prompt").classList.remove("hidden");
+        document.getElementById("welcome-screen").classList.add("hidden");
+        document.getElementById("results-container").classList.add("hidden");
+        document.getElementById("search-box").classList.add("hidden"); // Hide
+        document.getElementById("search-box").classList.add("hidden"); // Hide search box
+      }
+
+      function hideInstallPrompt() {
+        document.getElementById("install-prompt").classList.add("hidden");
+      }
+
+      function showScanButton() {
+        document.getElementById("welcome-screen").classList.remove("hidden");
+        document.getElementById("welcome-screen").innerHTML = `
+                          <h2>Ready to Scan! 🚀</h2>
+                          <p>Knip is installed and ready to analyze your project.</p>
+                          <button class="btn" onclick="startScan()">
+                              <span>🔍</span>
+                              Start Scanning
+                          </button>
+                      `;
+        document.getElementById("install-prompt").classList.add("hidden");
+        document.getElementById("results-container").classList.add("hidden");
+        document.getElementById("search-box").classList.add("hidden"); // Hide search box
+      }
+
+      function showLoading() {
+        document.getElementById("welcome-screen").classList.add("hidden");
+        document.getElementById("install-prompt").classList.add("hidden");
+        document.getElementById("results-container").classList.add("hidden");
+        document.getElementById("loading-screen").classList.remove("hidden");
+        document.getElementById("search-box").classList.add("hidden"); // Hide search box
+      }
+
+      function showResults(data) {
+        currentData = data;
+        document.getElementById("loading-screen").classList.add("hidden");
+        document.getElementById("welcome-screen").classList.add("hidden");
+        document.getElementById("install-prompt").classList.add("hidden");
+        document.getElementById("results-container").classList.remove("hidden");
+        document.getElementById("search-box").classList.remove("hidden"); // Show search box
+        populateResults(data);
+      }
+
+      function showError(error) {
+        document.getElementById("results-container").classList.add("hidden");
+        document.getElementById("loading-screen").classList.add("hidden");
+        document.getElementById("welcome-screen").innerHTML = `
+                          <h2>Scan Failed ❌</h2>
+                          <p>Error: ${error}</p>
+                          <button class="btn" onclick="startScan()">
+                              <span>🔄</span>
+                              Try Again
+                          </button>
+                      `;
+        document.getElementById("welcome-screen").classList.remove("hidden");
+        document.getElementById("search-box").classList.add("hidden"); // Hide search box
+      }
+
+      function populateResults(data) {
+        if (!data) return;
+
+        const container = document.getElementById("results-container");
+        container.innerHTML = "";
+
+        // Unused Files
+        if (data.files && data.files.length > 0) {
+          const filesSection = createSection(
+            "📁",
+            "Unused Files",
+            data.files.length
+          );
+          const filesContent = data.files
+            .map(
+              (file) => `
+              <div class="item" data-filter="${file.toLowerCase()}" title="${file}">
+                  <span class="item-name">${file.split("/").pop()}</span>
+                  <div class="item-actions">
+                      <button class="item-btn" onclick="openFile('${file}')">Open</button>
+                      <button class="item-btn danger" onclick="deleteFile('${file}')">Delete</button>
+                      <button class="item-btn" onclick="ignoreFile('${file}')">Ignore</button>
+                  </div>
+              </div>
+                          `
+            )
+            .join("");
+          filesSection.querySelector(".section-content").innerHTML =
+            filesContent;
+          container.appendChild(filesSection);
+        }
+
+        // Process Issues
+        if (data.issues) {
+          let allDependencies = [];
+          let allDevDependencies = [];
+          let allUnlisted = [];
+          let allExports = [];
+          let allTypes = [];
+          let allUnresolved = [];
+          let allDuplicates = [];
+
+          data.issues.forEach((issue) => {
+            allDependencies = allDependencies.concat(issue.dependencies || []);
+            allDevDependencies = allDevDependencies.concat(
+              issue.devDependencies || []
+            );
+            allUnlisted = allUnlisted.concat(issue.unlisted || []);
+            allExports = allExports.concat(issue.exports || []);
+            allTypes = allTypes.concat(issue.types || []);
+            allUnresolved = allUnresolved.concat(issue.unresolved || []);
+            allDuplicates = allDuplicates.concat(issue.duplicates || []);
+          });
+
+          // Unused Dependencies
+          if (allDependencies.length > 0) {
+            const depsSection = createSection(
+              "📦",
+              "Unused Dependencies",
+              allDependencies.length
+            );
+            const depsContent = allDependencies
+              .map(
+                (dep) => `
+                                  <div class="item" data-filter="${dep.name.toLowerCase()}">
+                                      <span class="item-name">${dep.name}</span>
+                                      <div class="item-actions">
+                                          <button class="item-btn danger" onclick="uninstallDep('${
+                                            dep.name
+                                          }')">Remove</button>
+                                          <button class="item-btn" onclick="ignoreDep('${
+                                            dep.name
+                                          }')">Ignore</button>
+                                      </div>
+                                  </div>
+                              `
+              )
+              .join("");
+            depsSection.querySelector(".section-content").innerHTML =
+              depsContent;
+            container.appendChild(depsSection);
+          }
+
+          // Unused Dev Dependencies
+          if (allDevDependencies.length > 0) {
+            const devDepsSection = createSection(
+              "🔧",
+              "Unused Dev Dependencies",
+              allDevDependencies.length
+            );
+            const devDepsContent = allDevDependencies
+              .map(
+                (dep) => `
+                                  <div class="item" data-filter="${dep.name.toLowerCase()}">
+                                      <span class="item-name">${dep.name}</span>
+                                      <div class="item-actions">
+                                          <button class="item-btn danger" onclick="uninstallDep('${
+                                            dep.name
+                                          }')">Remove</button>
+                                          <button class="item-btn" onclick="ignoreDep('${
+                                            dep.name
+                                          }')">Ignore</button>
+                                      </div>
+                                  </div>
+                              `
+              )
+              .join("");
+            devDepsSection.querySelector(".section-content").innerHTML =
+              devDepsContent;
+            container.appendChild(devDepsSection);
+          }
+
+          // Missing Dependencies (Unlisted)
+          if (allUnlisted.length > 0) {
+            const unlistedSection = createSection(
+              "⚠️",
+              "Missing Dependencies",
+              allUnlisted.length
+            );
+            const unlistedContent = allUnlisted
+              .map(
+                (dep) => `
+                                  <div class="item" data-filter="${dep.name.toLowerCase()}">
+                                      <span class="item-name">${dep.name}</span>
+                                      <div class="item-actions">
+                                        <button class="item-btn" onclick="openFile('${file}')">Open</button>
+                                          <button class="item-btn success" onclick="installDep('${
+                                            dep.name
+                                          }')">Install</button>
+                                          <button class="item-btn" onclick="ignoreDep('${
+                                            dep.name
+                                          }')">Ignore</button>
+                                      </div>
+                                  </div>
+                              `
+              )
+              .join("");
+            unlistedSection.querySelector(".section-content").innerHTML =
+              unlistedContent;
+            container.appendChild(unlistedSection);
+          }
+
+          // Unused Exports
+          if (allExports.length > 0) {
+            const exportsSection = createSection(
+              "📤",
+              "Unused Exports",
+              allExports.length
+            );
+            const exportsContent = allExports
+              .map(
+                (exp) => `
+                                  <div class="item" data-filter="${exp.toLowerCase()}">
+                                      <span class="item-name">${exp}</span>
+                                  </div>
+                              `
+              )
+              .join("");
+            exportsSection.querySelector(".section-content").innerHTML =
+              exportsContent;
+            container.appendChild(exportsSection);
+          }
+
+          // Unused Types
+          if (allTypes.length > 0) {
+            const typesSection = createSection(
+              "🏷️",
+              "Unused Types",
+              allTypes.length
+            );
+            const typesContent = allTypes
+              .map(
+                (type) => `
+                                  <div class="item" data-filter="${type.toLowerCase()}">
+                                      <span class="item-name">${type}</span>
+                                  </div>
+                              `
+              )
+              .join("");
+            typesSection.querySelector(".section-content").innerHTML =
+              typesContent;
+            container.appendChild(typesSection);
+          }
+
+          // Unresolved Imports
+          if (allUnresolved.length > 0) {
+            const unresolvedSection = createSection(
+              "❓",
+              "Unresolved Imports",
+              allUnresolved.length
+            );
+            const unresolvedContent = allUnresolved
+              .map(
+                (imp) => `
+                                  <div class="item" data-filter="${imp.toLowerCase()}">
+                                      <span class="item-name">${imp}</span>
+                                  </div>
+                              `
+              )
+              .join("");
+            unresolvedSection.querySelector(".section-content").innerHTML =
+              unresolvedContent;
+            container.appendChild(unresolvedSection);
+          }
+
+          // Duplicates
+          if (allDuplicates.length > 0) {
+            const duplicatesSection = createSection(
+              "👥",
+              "Duplicates",
+              allDuplicates.length
+            );
+            const duplicatesContent = allDuplicates
+              .map(
+                (dup) => `
+                                  <div class="item" data-filter="${dup.toLowerCase()}">
+                                      <span class="item-name">${dup}</span>
+                                  </div>
+                              `
+              )
+              .join("");
+            duplicatesSection.querySelector(".section-content").innerHTML =
+              duplicatesContent;
+            container.appendChild(duplicatesSection);
+          }
+        }
+
+        if (container.innerHTML === "") {
+          container.innerHTML =
+            '<div class="welcome-screen"><h2>✅ No Issues Found</h2><p>Your project looks clean!</p></div>';
+        }
+      }
+
+      function createSection(icon, title, count) {
+        const section = document.createElement("div");
+        section.className = "section";
+        section.innerHTML = `
+                          <div class="section-header" onclick="toggleSection(this)">
+                              <div class="section-title">
+                                  <span>${icon}</span>
+                                  <span>${title}</span>
+                                  <span class="badge">${count}</span>
+                              </div>
+                              <span class="chevron">›</span>
+                          </div>
+                          <div class="section-content"></div>
+                      `;
+        return section;
+      }
+
+      function toggleSection(header) {
+        const section = header.parentElement;
+        section.classList.toggle("expanded");
+      }
+
+      function filterItems(query) {
+        const items = document.querySelectorAll(".item");
+        const lowerQuery = query.toLowerCase();
+
+        items.forEach((item) => {
+          const filterText = item.getAttribute("data-filter") || "";
+          if (filterText.includes(lowerQuery)) {
+            item.style.display = "flex";
+          } else {
+            item.style.display = "none";
+          }
+        });
+      }
+
+      function openFile(filePath) {
+        vscode.postMessage({ type: "openFile", filePath });
+      }
+
+      function deleteFile(filePath) {
+        vscode.postMessage({ type: "deleteFile", filePath });
+      }
+
+      function installDep(dependency) {
+        vscode.postMessage({ type: "installDep", dependency });
+      }
+
+      function uninstallDep(dependency) {
+        vscode.postMessage({ type: "uninstallDep", dependency });
+      }
+
+      function ignoreDep(dependency) {
+        vscode.postMessage({ type: "ignoreDep", dependency });
+      }
+
+      function ignoreFile(filePath) {
+        vscode.postMessage({ type: "ignoreFile", filePath });
+      }
+
+      // Initialize
+      getStarted();
+    </script>
+  </body>
+</html>
