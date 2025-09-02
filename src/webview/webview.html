@@ -4,320 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Knip UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            animation: {
+              spin: "spin 1s linear infinite",
+            },
+          },
+        },
+      };
+    </script>
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          sans-serif;
-        background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
-        color: white;
-        height: 100vh;
-        overflow-x: hidden;
-      }
-
-      .container {
-        padding: 20px;
-        height: 100%;
-        overflow-y: auto;
-      }
-
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-
-      .header h1 {
-        font-size: 24px;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-      }
-
-      .header-actions {
-        display: flex;
-        gap: 10px;
-      }
-
-      .icon-btn {
-        background: rgba(255, 255, 255, 0.1);
-        border: none;
-        border-radius: 8px;
-        width: 36px;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.2s;
-        color: white;
-      }
-
-      .icon-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateY(-1px);
-      }
-
-      .search-box {
-        position: relative;
-        margin-bottom: 20px;
-      }
-
-      .search-input {
-        width: 100%;
-        padding: 12px 16px 12px 44px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 10px;
-        color: white;
-        font-size: 16px;
-        outline: none;
-        transition: all 0.2s;
-      }
-
+      /* Custom styles for elements that need special handling */
       .search-input::placeholder {
         color: rgba(255, 255, 255, 0.6);
       }
 
-      .search-input:focus {
-        border-color: #4fc3f7;
-        box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.2);
-      }
-
-      .search-icon {
-        position: absolute;
-        left: 14px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: rgba(255, 255, 255, 0.6);
-      }
-
-      .welcome-screen {
-        text-align: center;
-        padding: 60px 20px;
-      }
-
-      .welcome-screen h2 {
-        font-size: 28px;
-        margin-bottom: 16px;
+      .gradient-text {
         background: linear-gradient(135deg, #81c784 0%, #4fc3f7 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-      }
-
-      .welcome-screen p {
-        font-size: 16px;
-        color: rgba(255, 255, 255, 0.8);
-        margin-bottom: 30px;
-        line-height: 1.5;
-      }
-
-      .btn {
-        background: linear-gradient(135deg, #4fc3f7 0%, #29b6f6 100%);
-        border: none;
-        border-radius: 10px;
-        padding: 12px 24px;
-        color: white;
-        font-size: 16px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.2s;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3);
-      }
-
-      .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(79, 195, 247, 0.4);
-      }
-
-      .btn.secondary {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: none;
-      }
-
-      .btn.secondary:hover {
-        background: rgba(255, 255, 255, 0.2);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      }
-
-      .section {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 12px;
-        margin-bottom: 16px;
-        overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-      }
-
-      .section-header {
-        padding: 16px 20px;
-        background: rgba(255, 255, 255, 0.05);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-
-      .section-header:hover {
-        background: rgba(255, 255, 255, 0.08);
-      }
-
-      .section-title {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: 18px;
-        font-weight: 600;
-      }
-
-      .badge {
-        background: rgba(255, 255, 255, 0.2);
-        padding: 4px 8px;
-        border-radius: 12px;
-        font-size: 12px;
-        font-weight: 500;
-      }
-
-      .chevron {
-        transition: transform 0.2s;
-        color: rgba(255, 255, 255, 0.6);
-      }
-
-      .section.expanded .chevron {
-        transform: rotate(90deg);
-      }
-
-      .section-content {
-        display: none;
-        padding: 0;
-      }
-
-      .section.expanded .section-content {
-        display: block;
-      }
-
-      .item {
-        padding: 12px 20px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        transition: all 0.2s;
-      }
-
-      .item:hover {
-        background: rgba(255, 255, 255, 0.05);
-      }
-
-      .item:last-child {
-        border-bottom: none;
-      }
-
-      .item-name {
-        font-family: "Courier New", monospace;
-        font-size: 14px;
-      }
-
-      .item-actions {
-        display: flex;
-        gap: 8px;
-        opacity: 0;
-        transition: opacity 0.2s;
-      }
-
-      .item:hover .item-actions {
-        opacity: 1;
-      }
-
-      .item-btn {
-        background: rgba(255, 255, 255, 0.1);
-        border: none;
-        border-radius: 6px;
-        padding: 4px 8px;
-        color: white;
-        font-size: 12px;
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-
-      .item-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
-      }
-
-      .item-btn.danger {
-        background: rgba(244, 67, 54, 0.2);
-      }
-
-      .item-btn.danger:hover {
-        background: rgba(244, 67, 54, 0.4);
-      }
-
-      .item-btn.success {
-        background: rgba(76, 175, 80, 0.2);
-      }
-
-      .item-btn.success:hover {
-        background: rgba(76, 175, 80, 0.4);
-      }
-
-      .loading {
-        text-align: center;
-        padding: 40px;
-      }
-
-      .spinner {
-        width: 40px;
-        height: 40px;
-        border: 4px solid rgba(255, 255, 255, 0.1);
-        border-top: 4px solid #4fc3f7;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin: 0 auto 16px;
-      }
-
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-
-      .install-prompt {
-        background: rgba(255, 193, 7, 0.1);
-        border: 1px solid rgba(255, 193, 7, 0.3);
-        border-radius: 10px;
-        padding: 20px;
-        margin-bottom: 20px;
-        text-align: center;
-      }
-
-      .install-prompt h3 {
-        color: #ffc107;
-        margin-bottom: 10px;
-      }
-
-      .install-options {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        margin-top: 15px;
-      }
-
-      .hidden {
-        display: none;
       }
       .chevron {
         transition: transform 0.2s;
@@ -325,22 +33,49 @@
         font-size: 18px;
         font-weight: bold;
       }
-
       .section.expanded .chevron {
         transform: rotate(90deg);
       }
+      .chevron-rotate {
+        transition: transform 0.2s;
+      }
+      .section-content {
+        display: none;
+      }
+      .section.expanded .section-content {
+        display: block;
+      }
+      .section.expanded .chevron-rotate {
+        transform: rotate(90deg);
+      }
+
+      .item-actions {
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+
+      .item:hover .item-actions {
+        opacity: 1;
+      }
     </style>
   </head>
-  <body>
-    <div class="container">
-      <div class="header">
-        <h1>Knip UI</h1>
-        <div class="header-actions">
-          <button class="icon-btn" onclick="rescan()" title="Rescan">
+  <body
+    class="font-sans bg-gradient-to-br from-slate-800 to-blue-900 text-white h-screen overflow-x-hidden"
+  >
+    <div class="p-5 h-full overflow-y-auto">
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-5">
+        <h1 class="text-2xl font-semibold tracking-wide">Knip UI</h1>
+        <div class="flex gap-2.5">
+          <button
+            class="bg-white/10 border-none rounded-lg w-9 h-9 flex items-center justify-center cursor-pointer transition-all duration-200 text-white hover:bg-white/20 hover:-translate-y-0.5"
+            onclick="rescan()"
+            title="Rescan"
+          >
             <span>↻</span>
           </button>
           <button
-            class="icon-btn"
+            class="bg-white/10 border-none rounded-lg w-9 h-9 flex items-center justify-center cursor-pointer transition-all duration-200 text-white hover:bg-white/20 hover:-translate-y-0.5"
             onclick="toggleCollapseAll()"
             title="Collapse All"
           >
@@ -349,48 +84,69 @@
         </div>
       </div>
 
-      <div id="search-box" class="search-box">
+      <!-- Search Box -->
+      <div id="search-box" class="relative mb-5">
         <input
           type="text"
-          class="search-input"
+          class="w-full py-3 px-4 pl-11 bg-white/10 border border-white/20 rounded-xl text-white text-base outline-none transition-all duration-200 focus:border-blue-400 focus:shadow-[0_0_0_3px_rgba(79,195,247,0.2)]"
           placeholder="Filter"
           onkeyup="filterItems(this.value)"
         />
-        <span class="search-icon">🔍</span>
+        <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/60"
+          >🔍</span
+        >
       </div>
 
-      <div id="welcome-screen" class="welcome-screen">
-        <h2>Welcome to Knip Scanner! 🎉</h2>
-        <p>
+      <!-- Welcome Screen -->
+      <div id="welcome-screen" class="text-center py-15 px-5">
+        <h2 class="text-3xl mb-4 gradient-text">Welcome to Knip Scanner! 🎉</h2>
+        <p class="text-base text-white/80 mb-7 leading-relaxed">
           Analyze your project for unused files, dependencies, and exports.<br />Get
           started by scanning your workspace.
         </p>
-        <button class="btn" onclick="getStarted()">
+        <button
+          class="bg-gradient-to-br from-blue-400 to-blue-500 border-none rounded-xl py-3 px-6 text-white text-base font-medium cursor-pointer transition-all duration-200 inline-flex items-center gap-2 shadow-[0_4px_15px_rgba(79,195,247,0.3)] hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(79,195,247,0.4)]"
+          onclick="getStarted()"
+        >
           <span>▶</span>
           Get Started
         </button>
       </div>
 
-      <div id="install-prompt" class="install-prompt hidden">
-        <h3>⚠ Knip Not Installed</h3>
-        <p>
+      <!-- Install Prompt -->
+      <div
+        id="install-prompt"
+        class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-5 mb-5 text-center hidden"
+      >
+        <h3 class="text-yellow-400 mb-2.5">⚠ Knip Not Installed</h3>
+        <p class="mb-4">
           Knip is required to analyze your project. Please install it globally.
         </p>
-        <div class="install-options">
-          <button class="btn secondary" onclick="installKnip('npm')">
+        <div class="flex gap-2.5 justify-center mt-4">
+          <button
+            class="bg-white/10 border border-white/20 rounded-xl py-3 px-6 text-white text-base font-medium cursor-pointer transition-all duration-200 inline-flex items-center gap-2 hover:-translate-y-0.5 hover:bg-white/20 hover:shadow-[0_4px_15px_rgba(0,0,0,0.2)]"
+            onclick="installKnip('npm')"
+          >
             Install with NPM
           </button>
-          <button class="btn secondary" onclick="installKnip('yarn')">
+          <button
+            class="bg-white/10 border border-white/20 rounded-xl py-3 px-6 text-white text-base font-medium cursor-pointer transition-all duration-200 inline-flex items-center gap-2 hover:-translate-y-0.5 hover:bg-white/20 hover:shadow-[0_4px_15px_rgba(0,0,0,0.2)]"
+            onclick="installKnip('yarn')"
+          >
             Install with Yarn
           </button>
         </div>
       </div>
 
-      <div id="loading-screen" class="loading hidden">
-        <div class="spinner"></div>
+      <!-- Loading Screen -->
+      <div id="loading-screen" class="text-center py-10 hidden">
+        <div
+          class="w-10 h-10 border-4 border-white/10 border-t-blue-400 rounded-full animate-spin mx-auto mb-4"
+        ></div>
         <p>Scanning your project...</p>
       </div>
 
+      <!-- Results Container -->
       <div id="results-container" class="hidden">
         <!-- Content will be populated by JavaScript -->
       </div>
@@ -398,32 +154,103 @@
 
     <script>
       const vscode = acquireVsCodeApi();
+      // ✅ State variables
       let currentData = null;
+      let currentFilter = "";
+      let expandedSections = new Set();
+      let uiState = "idle"; // 'idle', 'scanning', 'results', 'error'
+      let allCollapsed = false;
 
+      // ✅ 1. INITIALIZE STATE FUNCTION
+      function initializeState() {
+        console.log("🔧 Initializing webview state");
+
+        // Get previously saved state from webview storage
+        const savedState = vscode.getState();
+
+        if (savedState) {
+          console.log("🔧 Restoring saved state:", savedState);
+
+          // Restore scan results
+          if (savedState.scanResults) {
+            currentData = savedState.scanResults;
+            uiState = "results";
+          }
+
+          // Restore filter text
+          if (savedState.filterText) {
+            currentFilter = savedState.filterText;
+            const searchInput = document.getElementById("search-input");
+            if (searchInput) {
+              searchInput.value = currentFilter;
+            }
+          }
+
+          // Restore expanded sections
+          if (savedState.expandedSections) {
+            expandedSections = new Set(savedState.expandedSections);
+          }
+
+          // Restore UI based on saved data
+          if (currentData && uiState === "results") {
+            showResults(currentData);
+            showStateIndicator("State Restored");
+          }
+        }
+
+        // Request any additional data from extension
+        vscode.postMessage({ type: "requestPreviousResults" });
+      }
+      // ✅ 2. SAVE STATE FUNCTION
+      function saveCurrentState() {
+        const state = {
+          scanResults: currentData,
+          filterText: currentFilter,
+          expandedSections: Array.from(expandedSections),
+          uiState: uiState,
+          timestamp: Date.now(),
+        };
+
+        console.log("🔧 Saving webview state:", state);
+        vscode.setState(state);
+      }
+      // ✅ 3. MESSAGE HANDLING WITH STATE PERSISTENCE
       window.addEventListener("message", (event) => {
         const message = event.data;
+        console.log("🔧 Received message:", message.type);
 
         switch (message.type) {
           case "updateData":
-            updateData(message.data);
+            if (message.data) {
+              currentData = message.data;
+              uiState = "results";
+              showResults(currentData);
+              saveCurrentState(); // ✅ Save after updating
+            }
             break;
-          case "knipInstallStatus":
-            handleInstallStatus(message.installed);
-            break;
-          case "showInstallPrompt":
-            showInstallPrompt();
-            break;
+
           case "scanStarted":
+            uiState = "scanning";
             showLoading();
+            saveCurrentState(); // ✅ Save state change
             break;
+
           case "scanCompleted":
-            showResults(message.data);
+            currentData = message.data;
+            uiState = "results";
+            showResults(currentData);
+            saveCurrentState(); // ✅ Save after scan completion
             break;
+
           case "scanError":
+            uiState = "error";
             showError(message.error);
+            saveCurrentState(); // ✅ Save error state
             break;
+
           case "collapseAll":
             collapseAllSections();
+            saveCurrentState(); // ✅ Save after UI change
             break;
         }
       });
@@ -450,42 +277,97 @@
         vscode.postMessage({ type: "collapseAll" });
       }
 
+      // ✅ 6. COLLAPSE/EXPAND ALL WITH STATE PERSISTENCE
       function collapseAllSections() {
         document.querySelectorAll(".section").forEach((section) => {
           section.classList.remove("expanded");
         });
+        expandedSections.clear();
+        saveCurrentState();
       }
-      // Add this new function for expand all
+
       function expandAllSections() {
         document.querySelectorAll(".section").forEach((section) => {
           section.classList.add("expanded");
+
+          // ✅ Add to expanded sections tracking with null check
+          const titleElement =
+            section.querySelector(".section-title span:nth-child(2)") ||
+            section.querySelector(".section-title span:last-child") ||
+            section.querySelector(".section-title");
+
+          if (titleElement && titleElement.textContent) {
+            expandedSections.add(titleElement.textContent.trim());
+          }
         });
       }
+      // ✅ 7. CLEAR STATE FUNCTION FOR DEBUGGING
+      function clearStoredData() {
+        vscode.setState(undefined);
+        currentData = null;
+        currentFilter = "";
+        expandedSections = new Set();
+        uiState = "idle";
 
-      // Update the collapse button to toggle between collapse/expand
-      let allCollapsed = false;
+        // Clear UI
+        document.getElementById("search-input").value = "";
+        showWelcome();
 
+        // Send message to extension to clear its state too
+        vscode.postMessage({ type: "clearResults" });
+
+        showStateIndicator("State Cleared");
+      }
+      function showStateIndicator(message) {
+        // Create or update state indicator
+        let indicator = document.getElementById("state-indicator");
+        if (!indicator) {
+          indicator = document.createElement("div");
+          indicator.id = "state-indicator";
+          indicator.style.cssText = `
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background: rgba(76, 175, 80, 0.8);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s;
+      `;
+          document.body.appendChild(indicator);
+        }
+
+        indicator.textContent = message;
+        indicator.style.opacity = "1";
+
+        setTimeout(() => {
+          indicator.style.opacity = "0";
+        }, 2000);
+      }
+      // ✅ Fixed toggle function with proper state management
       function toggleCollapseAll() {
+        const toggleBtn = document.querySelector(
+          '.icon-btn[onclick="toggleCollapseAll()"]'
+        );
+
         if (allCollapsed) {
+          // Currently collapsed, so expand all
           expandAllSections();
-          document.querySelector(
-            '.icon-btn[onclick="toggleCollapseAll()"]'
-          ).innerHTML = "⬍";
-          document.querySelector(
-            '.icon-btn[onclick="toggleCollapseAll()"]'
-          ).title = "Collapse All";
+          toggleBtn.innerHTML = "⬍";
+          toggleBtn.title = "Collapse All";
           allCollapsed = false;
         } else {
+          // Currently expanded, so collapse all
           collapseAllSections();
-          document.querySelector(
-            '.icon-btn[onclick="toggleCollapseAll()"]'
-          ).innerHTML = "⬌";
-          document.querySelector(
-            '.icon-btn[onclick="toggleCollapseAll()"]'
-          ).title = "Expand All";
+          toggleBtn.innerHTML = "⬌";
+          toggleBtn.title = "Expand All";
           allCollapsed = true;
         }
       }
+
       function handleInstallStatus(installed) {
         if (installed) {
           hideInstallPrompt();
@@ -499,8 +381,7 @@
         document.getElementById("install-prompt").classList.remove("hidden");
         document.getElementById("welcome-screen").classList.add("hidden");
         document.getElementById("results-container").classList.add("hidden");
-        document.getElementById("search-box").classList.add("hidden"); // Hide
-        document.getElementById("search-box").classList.add("hidden"); // Hide search box
+        document.getElementById("search-box").classList.add("hidden");
       }
 
       function hideInstallPrompt() {
@@ -510,16 +391,16 @@
       function showScanButton() {
         document.getElementById("welcome-screen").classList.remove("hidden");
         document.getElementById("welcome-screen").innerHTML = `
-                          <h2>Ready to Scan! 🚀</h2>
-                          <p>Knip is installed and ready to analyze your project.</p>
-                          <button class="btn" onclick="startScan()">
-                              <span>🔍</span>
-                              Start Scanning
-                          </button>
-                      `;
+          <h2 class="text-3xl mb-4 gradient-text">Ready to Scan! 🚀</h2>
+          <p class="text-base text-white/80 mb-7">Knip is installed and ready to analyze your project.</p>
+          <button class="bg-gradient-to-br from-blue-400 to-blue-500 border-none rounded-xl py-3 px-6 text-white text-base font-medium cursor-pointer transition-all duration-200 inline-flex items-center gap-2 shadow-[0_4px_15px_rgba(79,195,247,0.3)] hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(79,195,247,0.4)]" onclick="startScan()">
+            <span>🔍</span>
+            Start Scanning
+          </button>
+        `;
         document.getElementById("install-prompt").classList.add("hidden");
         document.getElementById("results-container").classList.add("hidden");
-        document.getElementById("search-box").classList.add("hidden"); // Hide search box
+        document.getElementById("search-box").classList.add("hidden");
       }
 
       function showLoading() {
@@ -527,32 +408,59 @@
         document.getElementById("install-prompt").classList.add("hidden");
         document.getElementById("results-container").classList.add("hidden");
         document.getElementById("loading-screen").classList.remove("hidden");
-        document.getElementById("search-box").classList.add("hidden"); // Hide search box
+        document.getElementById("search-box").classList.add("hidden");
       }
 
       function showResults(data) {
-        currentData = data;
+        if (!data || uiState !== "results") return;
+
+        // Hide other screens
         document.getElementById("loading-screen").classList.add("hidden");
         document.getElementById("welcome-screen").classList.add("hidden");
         document.getElementById("install-prompt").classList.add("hidden");
+
+        // Show results
         document.getElementById("results-container").classList.remove("hidden");
-        document.getElementById("search-box").classList.remove("hidden"); // Show search box
+        document.getElementById("search-box").classList.remove("hidden");
+
         populateResults(data);
+
+        // ✅ Restore expanded sections after populating
+        setTimeout(() => {
+          document.querySelectorAll(".section").forEach((section) => {
+            const titleElement =
+              section.querySelector(".section-title span:nth-child(2)") ||
+              section.querySelector(".section-title span:last-child") ||
+              section.querySelector(".section-title");
+
+            if (
+              titleElement &&
+              expandedSections.has(titleElement.textContent.trim())
+            ) {
+              section.classList.add("expanded");
+            }
+          });
+
+          // ✅ Restore filter if it exists
+          if (currentFilter) {
+            filterItems(currentFilter);
+          }
+        }, 100);
       }
 
       function showError(error) {
         document.getElementById("results-container").classList.add("hidden");
         document.getElementById("loading-screen").classList.add("hidden");
         document.getElementById("welcome-screen").innerHTML = `
-                          <h2>Scan Failed ❌</h2>
-                          <p>Error: ${error}</p>
-                          <button class="btn" onclick="startScan()">
-                              <span>🔄</span>
-                              Try Again
-                          </button>
-                      `;
+          <h2 class="text-3xl mb-4 text-red-400">Scan Failed ❌</h2>
+          <p class="text-base text-white/80 mb-7">Error: ${error}</p>
+          <button class="bg-gradient-to-br from-blue-400 to-blue-500 border-none rounded-xl py-3 px-6 text-white text-base font-medium cursor-pointer transition-all duration-200 inline-flex items-center gap-2 shadow-[0_4px_15px_rgba(79,195,247,0.3)] hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(79,195,247,0.4)]" onclick="startScan()">
+            <span>🔄</span>
+            Try Again
+          </button>
+        `;
         document.getElementById("welcome-screen").classList.remove("hidden");
-        document.getElementById("search-box").classList.add("hidden"); // Hide search box
+        document.getElementById("search-box").classList.add("hidden");
       }
 
       function populateResults(data) {
@@ -571,15 +479,17 @@
           const filesContent = data.files
             .map(
               (file) => `
-              <div class="item" data-filter="${file.toLowerCase()}" title="${file}">
-                  <span class="item-name">${file.split("/").pop()}</span>
-                  <div class="item-actions">
-                      <button class="item-btn" onclick="openFile('${file}')">Open</button>
-                      <button class="item-btn danger" onclick="deleteFile('${file}')">Delete</button>
-                      <button class="item-btn" onclick="ignoreFile('${file}')">Ignore</button>
+              <div class="item py-3 px-5 border-b border-white/5 flex justify-between items-center transition-all duration-200 hover:bg-white/5" data-filter="${file.toLowerCase()}" title="${file}">
+                  <span class="font-mono text-sm">${file
+                    .split("/")
+                    .pop()}</span>
+                  <div class="item-actions flex gap-2">
+                      <button class="bg-white/10 border-none rounded-md py-1 px-2 text-white text-xs cursor-pointer transition-all duration-200 hover:bg-white/20" onclick="openFile('${file}')">Open</button>
+                      <button class="bg-red-500/20 border-none rounded-md py-1 px-2 text-white text-xs cursor-pointer transition-all duration-200 hover:bg-red-500/40" onclick="deleteFile('${file}')">Delete</button>
+                      <button class="bg-white/10 border-none rounded-md py-1 px-2 text-white text-xs cursor-pointer transition-all duration-200 hover:bg-white/20" onclick="ignoreFile('${file}')">Ignore</button>
                   </div>
               </div>
-                          `
+              `
             )
             .join("");
           filesSection.querySelector(".section-content").innerHTML =
@@ -619,18 +529,18 @@
             const depsContent = allDependencies
               .map(
                 (dep) => `
-                                  <div class="item" data-filter="${dep.name.toLowerCase()}">
-                                      <span class="item-name">${dep.name}</span>
-                                      <div class="item-actions">
-                                          <button class="item-btn danger" onclick="uninstallDep('${
-                                            dep.name
-                                          }')">Remove</button>
-                                          <button class="item-btn" onclick="ignoreDep('${
-                                            dep.name
-                                          }')">Ignore</button>
-                                      </div>
-                                  </div>
-                              `
+                <div class="item py-3 px-5 border-b border-white/5 flex justify-between items-center transition-all duration-200 hover:bg-white/5" data-filter="${dep.name.toLowerCase()}">
+                    <span class="font-mono text-sm">${dep.name}</span>
+                    <div class="item-actions flex gap-2">
+                        <button class="bg-red-500/20 border-none rounded-md py-1 px-2 text-white text-xs cursor-pointer transition-all duration-200 hover:bg-red-500/40" onclick="uninstallDep('${
+                          dep.name
+                        }')">Remove</button>
+                        <button class="bg-white/10 border-none rounded-md py-1 px-2 text-white text-xs cursor-pointer transition-all duration-200 hover:bg-white/20" onclick="ignoreDep('${
+                          dep.name
+                        }')">Ignore</button>
+                    </div>
+                </div>
+                `
               )
               .join("");
             depsSection.querySelector(".section-content").innerHTML =
@@ -648,18 +558,18 @@
             const devDepsContent = allDevDependencies
               .map(
                 (dep) => `
-                                  <div class="item" data-filter="${dep.name.toLowerCase()}">
-                                      <span class="item-name">${dep.name}</span>
-                                      <div class="item-actions">
-                                          <button class="item-btn danger" onclick="uninstallDep('${
-                                            dep.name
-                                          }')">Remove</button>
-                                          <button class="item-btn" onclick="ignoreDep('${
-                                            dep.name
-                                          }')">Ignore</button>
-                                      </div>
-                                  </div>
-                              `
+                <div class="item py-3 px-5 border-b border-white/5 flex justify-between items-center transition-all duration-200 hover:bg-white/5" data-filter="${dep.name.toLowerCase()}">
+                    <span class="font-mono text-sm">${dep.name}</span>
+                    <div class="item-actions flex gap-2">
+                        <button class="bg-red-500/20 border-none rounded-md py-1 px-2 text-white text-xs cursor-pointer transition-all duration-200 hover:bg-red-500/40" onclick="uninstallDep('${
+                          dep.name
+                        }')">Remove</button>
+                        <button class="bg-white/10 border-none rounded-md py-1 px-2 text-white text-xs cursor-pointer transition-all duration-200 hover:bg-white/20" onclick="ignoreDep('${
+                          dep.name
+                        }')">Ignore</button>
+                    </div>
+                </div>
+                `
               )
               .join("");
             devDepsSection.querySelector(".section-content").innerHTML =
@@ -677,19 +587,21 @@
             const unlistedContent = allUnlisted
               .map(
                 (dep) => `
-                                  <div class="item" data-filter="${dep.name.toLowerCase()}">
-                                      <span class="item-name">${dep.name}</span>
-                                      <div class="item-actions">
-                                        <button class="item-btn" onclick="openFile('${file}')">Open</button>
-                                          <button class="item-btn success" onclick="installDep('${
-                                            dep.name
-                                          }')">Install</button>
-                                          <button class="item-btn" onclick="ignoreDep('${
-                                            dep.name
-                                          }')">Ignore</button>
-                                      </div>
-                                  </div>
-                              `
+                <div class="item py-3 px-5 border-b border-white/5 flex justify-between items-center transition-all duration-200 hover:bg-white/5" data-filter="${dep.name.toLowerCase()}">
+                    <span class="font-mono text-sm">${dep.name}</span>
+                    <div class="item-actions flex gap-2">
+                        <button class="bg-white/10 border-none rounded-md py-1 px-2 text-white text-xs cursor-pointer transition-all duration-200 hover:bg-white/20" onclick="openFile('${
+                          dep.file || ""
+                        }')">Open</button>
+                        <button class="bg-green-500/20 border-none rounded-md py-1 px-2 text-white text-xs cursor-pointer transition-all duration-200 hover:bg-green-500/40" onclick="installDep('${
+                          dep.name
+                        }')">Install</button>
+                        <button class="bg-white/10 border-none rounded-md py-1 px-2 text-white text-xs cursor-pointer transition-all duration-200 hover:bg-white/20" onclick="ignoreDep('${
+                          dep.name
+                        }')">Ignore</button>
+                    </div>
+                </div>
+                `
               )
               .join("");
             unlistedSection.querySelector(".section-content").innerHTML =
@@ -707,10 +619,10 @@
             const exportsContent = allExports
               .map(
                 (exp) => `
-                                  <div class="item" data-filter="${exp.toLowerCase()}">
-                                      <span class="item-name">${exp}</span>
-                                  </div>
-                              `
+                <div class="item py-3 px-5 border-b border-white/5 flex justify-between items-center transition-all duration-200 hover:bg-white/5" data-filter="${exp.toLowerCase()}">
+                    <span class="font-mono text-sm">${exp}</span>
+                </div>
+                `
               )
               .join("");
             exportsSection.querySelector(".section-content").innerHTML =
@@ -728,10 +640,10 @@
             const typesContent = allTypes
               .map(
                 (type) => `
-                                  <div class="item" data-filter="${type.toLowerCase()}">
-                                      <span class="item-name">${type}</span>
-                                  </div>
-                              `
+                <div class="item py-3 px-5 border-b border-white/5 flex justify-between items-center transition-all duration-200 hover:bg-white/5" data-filter="${type.toLowerCase()}">
+                    <span class="font-mono text-sm">${type}</span>
+                </div>
+                `
               )
               .join("");
             typesSection.querySelector(".section-content").innerHTML =
@@ -749,10 +661,10 @@
             const unresolvedContent = allUnresolved
               .map(
                 (imp) => `
-                                  <div class="item" data-filter="${imp.toLowerCase()}">
-                                      <span class="item-name">${imp}</span>
-                                  </div>
-                              `
+                <div class="item py-3 px-5 border-b border-white/5 flex justify-between items-center transition-all duration-200 hover:bg-white/5" data-filter="${imp.toLowerCase()}">
+                    <span class="font-mono text-sm">${imp}</span>
+                </div>
+                `
               )
               .join("");
             unresolvedSection.querySelector(".section-content").innerHTML =
@@ -770,10 +682,10 @@
             const duplicatesContent = allDuplicates
               .map(
                 (dup) => `
-                                  <div class="item" data-filter="${dup.toLowerCase()}">
-                                      <span class="item-name">${dup}</span>
-                                  </div>
-                              `
+                <div class="item py-3 px-5 border-b border-white/5 flex justify-between items-center transition-all duration-200 hover:bg-white/5" data-filter="${dup.toLowerCase()}">
+                    <span class="font-mono text-sm">${dup}</span>
+                </div>
+                `
               )
               .join("");
             duplicatesSection.querySelector(".section-content").innerHTML =
@@ -781,36 +693,102 @@
             container.appendChild(duplicatesSection);
           }
         }
+        setTimeout(() => {
+          document.querySelectorAll(".section").forEach((section) => {
+            const sectionTitle = section.querySelector(
+              ".section-title span:nth-child(2)"
+            );
+            if (
+              sectionTitle &&
+              expandedSections.has(sectionTitle.textContent)
+            ) {
+              section.classList.add("expanded");
+            }
+          });
 
+          // Update button state after restoration
+          updateToggleAllButtonState();
+        }, 50); // Small delay to ensure DOM is ready
         if (container.innerHTML === "") {
           container.innerHTML =
-            '<div class="welcome-screen"><h2>✅ No Issues Found</h2><p>Your project looks clean!</p></div>';
+            '<div class="text-center py-15 px-5"><h2 class="text-3xl mb-4 text-green-400">✅ No Issues Found</h2><p class="text-base text-white/80">Your project looks clean!</p></div>';
         }
       }
 
       function createSection(icon, title, count) {
         const section = document.createElement("div");
-        section.className = "section";
+        section.className =
+          "section bg-white/5 rounded-xl mb-4 overflow-hidden border border-white/10 backdrop-blur-sm";
         section.innerHTML = `
-                          <div class="section-header" onclick="toggleSection(this)">
-                              <div class="section-title">
-                                  <span>${icon}</span>
-                                  <span>${title}</span>
-                                  <span class="badge">${count}</span>
-                              </div>
-                              <span class="chevron">›</span>
-                          </div>
-                          <div class="section-content"></div>
-                      `;
+          <div class="py-4 px-5 bg-white/5 border-b border-white/10 flex justify-between items-center cursor-pointer transition-all duration-200 hover:bg-white/8" onclick="toggleSection(this)">
+              <div class="flex items-center gap-3 text-lg font-semibold">
+                  <span>${icon}</span>
+                  <span>${title}</span>
+                  <span class="bg-white/20 py-1 px-2 rounded-xl text-xs font-medium">${count}</span>
+              </div>
+              <span class="chevron-rotate text-lg font-bold text-white/60">›</span>
+          </div>
+          <div class="section-content hidden"></div>
+        `;
         return section;
       }
 
       function toggleSection(header) {
         const section = header.parentElement;
+
+        // ✅ Improved selector with null check
+        let sectionTitle = "Unknown Section";
+        const titleElement =
+          section.querySelector(".section-title span:nth-child(2)") ||
+          section.querySelector(".section-title span:last-child") ||
+          section.querySelector(".section-title");
+
+        if (titleElement && titleElement.textContent) {
+          sectionTitle = titleElement.textContent.trim();
+        }
+
         section.classList.toggle("expanded");
+
+        // Update expanded sections tracking
+        if (section.classList.contains("expanded")) {
+          expandedSections.add(sectionTitle);
+        } else {
+          expandedSections.delete(sectionTitle);
+        }
+
+        // ✅ Save state after toggling
+        saveCurrentState();
       }
 
+      function updateToggleAllButtonState() {
+        const sections = document.querySelectorAll(".section");
+        const expandedCount =
+          document.querySelectorAll(".section.expanded").length;
+        const toggleBtn = document.querySelector(
+          '.icon-btn[onclick="toggleCollapseAll()"]'
+        );
+
+        if (!toggleBtn) return;
+
+        if (expandedCount === 0) {
+          // All collapsed
+          toggleBtn.innerHTML = "⬌";
+          toggleBtn.title = "Expand All";
+          allCollapsed = true;
+        } else if (expandedCount === sections.length) {
+          // All expanded
+          toggleBtn.innerHTML = "⬍";
+          toggleBtn.title = "Collapse All";
+          allCollapsed = false;
+        } else {
+          // Mixed state - show collapse option
+          toggleBtn.innerHTML = "⬍";
+          toggleBtn.title = "Collapse All";
+          allCollapsed = false;
+        }
+      }
       function filterItems(query) {
+        currentFilter = query;
         const items = document.querySelectorAll(".item");
         const lowerQuery = query.toLowerCase();
 
@@ -822,6 +800,9 @@
             item.style.display = "none";
           }
         });
+
+        // ✅ Save state after filtering
+        saveCurrentState();
       }
 
       function openFile(filePath) {
@@ -848,8 +829,31 @@
         vscode.postMessage({ type: "ignoreFile", filePath });
       }
 
-      // Initialize
-      getStarted();
+      // ✅ 9. INITIALIZATION
+      // Initialize state when DOM is ready
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initializeState);
+      } else {
+        initializeState();
+      }
+
+      // Add event listener for search input
+      document.addEventListener("DOMContentLoaded", () => {
+        const searchInput = document.getElementById("search-input");
+        if (searchInput) {
+          searchInput.addEventListener("input", (e) => {
+            filterItems(e.target.value);
+          });
+        }
+      });
+
+      // ✅ 10. EXTENSION-SIDE COORDINATION
+      // Request initial data if no saved state exists
+      setTimeout(() => {
+        if (!currentData && uiState === "idle") {
+          getStarted();
+        }
+      }, 200);
     </script>
   </body>
 </html>

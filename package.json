@@ -3,17 +3,16 @@
   "displayName": "Knip UI",
   "publisher": "akshay7000",
   "description": "Beautiful UI for Knip - Find unused files, exports, and dependencies",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "engines": {
     "vscode": "^1.60.0"
   },
   "categories": [
     "Other",
     "Linters",
-    "Code Analysis",
-    "Code Review",
-    "Code Smells",
-    "Technical Debt"
+    "Programming Languages",
+    "Education",
+    "Testing"
   ],
   "keywords": [
     "knip",
